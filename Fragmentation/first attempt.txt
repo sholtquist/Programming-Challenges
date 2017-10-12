@@ -1,0 +1,76 @@
+import java.io.*;
+
+public class Main {
+
+    static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    public static void main(String[] args) throws IOException {
+
+        int cases = Integer.parseInt(reader.readLine());
+        String[] fragments;
+        reader.readLine();
+        int numFrags = 0;
+
+        for (int i = 0; i < cases; i++) {
+
+            fragments = new String[288];
+            int low = Integer.MAX_VALUE;
+            int high = 0;
+
+            String str;
+            for(int j = 0; j < 288; j++) {
+
+                str = reader.readLine();
+                if(str.equals("")) {
+                    numFrags = j;
+                    break;
+                }
+                //System.out.println("getting input..." + str + " : " + j);
+                fragments[j] = str;
+                int len = str.length();
+
+                if(len < low) {
+                    low = len;
+                } else if (len > high) {
+                    high = len;
+                }
+
+            }
+
+            int size = low + high;
+            int[] onesInCol = new int[size];
+
+            for (int k = 0; k < numFrags; k++) {
+
+                char[] currFrag = fragments[k].toCharArray();
+                int fragLen = currFrag.length;
+                for(int l = 0; l < fragLen; l++) {
+                    
+                    if(currFrag[l] == '1') {
+                        onesInCol[l]++;
+                        onesInCol[size-(fragLen-l)]++;
+                    }
+                    
+                }
+
+            }
+
+            for (int i1 = 0; i1 < onesInCol.length; i1++) {
+                System.out.println(onesInCol[i1]);
+            }
+
+            char[] outputByte = new char[size];
+            for(int m = 0; m < size; m++) {
+
+                //System.out.println(onesInCol[m] + " > " + numFrags / 2 + " : " +(onesInCol[m] > numFrags));
+                outputByte[m] = (onesInCol[m] > (numFrags / 2)) ? '1' : '0';
+
+            }
+
+            System.out.println(new String(outputByte));
+
+        }
+
+    }
+
+}
